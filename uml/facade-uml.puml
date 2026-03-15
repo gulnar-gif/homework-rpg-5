@@ -1,0 +1,49 @@
+@startuml
+
+class DungeonFacade {
+    -preparationService : PreparationService
+    -battleService : BattleService
+    -rewardService : RewardService
+    +runAdventure(hero, boss, action) : AdventureResult
+}
+
+class PreparationService {
+    +prepare(hero, boss, action) : String
+}
+
+class BattleService {
+    +battle(hero, boss, action) : AdventureResult
+}
+
+class RewardService {
+    +determineReward(result) : String
+}
+
+class AdventureResult {
+    -winner : String
+    -rounds : int
+    -reward : String
+    -log : List<String>
+}
+
+class HeroProfile
+class BossEnemy
+interface AttackAction
+
+DungeonFacade --> PreparationService
+DungeonFacade --> BattleService
+DungeonFacade --> RewardService
+
+DungeonFacade --> AdventureResult
+
+BattleService --> HeroProfile
+BattleService --> BossEnemy
+BattleService --> AttackAction
+
+PreparationService --> HeroProfile
+PreparationService --> BossEnemy
+PreparationService --> AttackAction
+
+RewardService --> AdventureResult
+
+@enduml

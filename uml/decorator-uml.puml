@@ -1,0 +1,31 @@
+@startuml
+
+interface AttackAction {
+    +getActionName() : String
+    +getDamage() : int
+    +getEffectSummary() : String
+}
+
+class BasicAttack {
+    -actionName : String
+    -baseDamage : int
+}
+
+abstract class ActionDecorator {
+    -wrappedAction : AttackAction
+}
+
+class FireRuneDecorator
+class PoisonCoatingDecorator
+class CriticalFocusDecorator
+
+AttackAction <|.. BasicAttack
+AttackAction <|.. ActionDecorator
+
+ActionDecorator o-- AttackAction
+
+ActionDecorator <|-- FireRuneDecorator
+ActionDecorator <|-- PoisonCoatingDecorator
+ActionDecorator <|-- CriticalFocusDecorator
+
+@enduml
