@@ -14,44 +14,69 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("=== Homework 5 Demo: Decorator + Facade ===\n");
 
-        // TODO: Create a hero and a boss with your own meaningful stats.
-        HeroProfile hero = new HeroProfile("TODO Hero", 100);
-        BossEnemy boss = new BossEnemy("TODO Boss", 120, 15);
 
-        // TODO: Start with a base action and then create several decorated versions.
-        AttackAction basic = new BasicAttack("Strike", 10);
-        AttackAction enhanced = new FireRuneDecorator(
+        HeroProfile hero = new HeroProfile("Arlan", 100);
+        BossEnemy boss = new BossEnemy("Shadow Dragon", 90, 14);
+        AttackAction basic = new BasicAttack("Sword Strike", 12);
+        AttackAction fireOnly = new FireRuneDecorator(basic);
+
+        AttackAction poisonThenCritical = new CriticalFocusDecorator(
                 new PoisonCoatingDecorator(
-                        new CriticalFocusDecorator(basic)
+                        new BasicAttack("Sword Strike", 12)
+                )
+        );
+
+        AttackAction fullyEnhanced = new FireRuneDecorator(
+                new PoisonCoatingDecorator(
+                        new CriticalFocusDecorator(
+                                new BasicAttack("Sword Strike", 12)
+                        )
                 )
         );
 
         System.out.println("--- Decorator Preview ---");
-        System.out.println("Base action: " + basic.getActionName());
-        System.out.println("Base damage: " + basic.getDamage());
-        System.out.println("Base effects: " + basic.getEffectSummary());
-        System.out.println();
-        System.out.println("Enhanced action: " + enhanced.getActionName());
-        System.out.println("Enhanced damage: " + enhanced.getDamage());
-        System.out.println("Enhanced effects: " + enhanced.getEffectSummary());
 
-        // TODO: Replace the placeholder preview above with richer proof of runtime composition.
+        System.out.println("1) Base action");
+        System.out.println("Name: " + basic.getActionName());
+        System.out.println("Damage: " + basic.getDamage());
+        System.out.println("Effects: " + basic.getEffectSummary());
+        System.out.println();
+
+        System.out.println("2) Fire-enhanced action");
+        System.out.println("Name: " + fireOnly.getActionName());
+        System.out.println("Damage: " + fireOnly.getDamage());
+        System.out.println("Effects: " + fireOnly.getEffectSummary());
+        System.out.println();
+
+        System.out.println("3) Poison + Critical action");
+        System.out.println("Name: " + poisonThenCritical.getActionName());
+        System.out.println("Damage: " + poisonThenCritical.getDamage());
+        System.out.println("Effects: " + poisonThenCritical.getEffectSummary());
+        System.out.println();
+
+        System.out.println("4) Fire + Poison + Critical action");
+        System.out.println("Name: " + fullyEnhanced.getActionName());
+        System.out.println("Damage: " + fullyEnhanced.getDamage());
+        System.out.println("Effects: " + fullyEnhanced.getEffectSummary());
+
+        System.out.println("\nThis proves that attacks can be extended at runtime");
+        System.out.println("without creating separate subclasses for every combination.");
 
         System.out.println("\n--- Facade Preview ---");
-        DungeonFacade facade = new DungeonFacade().setRandomSeed(42L);
-        AdventureResult result = facade.runAdventure(hero, boss, enhanced);
 
+        DungeonFacade facade = new DungeonFacade().setRandomSeed(42L);
+        AdventureResult result = facade.runAdventure(hero, boss, fullyEnhanced);
+
+        System.out.println("Final Summary:");
         System.out.println("Winner: " + result.getWinner());
         System.out.println("Rounds: " + result.getRounds());
         System.out.println("Reward: " + result.getReward());
+        System.out.println();
+
+        System.out.println("Adventure Log:");
         for (String line : result.getLog()) {
             System.out.println(line);
         }
-
-        // TODO: Expand this demo so it clearly proves:
-        // 1) multiple decorator combinations
-        // 2) one full dungeon run through the facade
-        // 3) readable final summary
 
         System.out.println("\n=== Demo Complete ===");
     }
